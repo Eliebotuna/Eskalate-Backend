@@ -36,17 +36,13 @@ export async function aggregateDailyAnalytics(): Promise<void> {
 }
 
 export function scheduleDailyAnalyticsCron(): void {
-  // Tous les jours à minuit GMT (UTC).
   cron.schedule(
     "0 0 * * *",
     () => {
       aggregateDailyAnalytics().catch((err) => {
-        // En production, on loggerait l'erreur proprement
-        // eslint-disable-next-line no-console
         console.error("Failed to run daily analytics job:", err);
       });
     },
     { timezone: "Etc/UTC" }
   );
 }
-

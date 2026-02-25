@@ -2,6 +2,22 @@
 
 Backend REST API for the **A2SV Eskalate assessment**. Authors publish articles, Readers consume them, and an Analytics Engine aggregates read counts into daily reports (GMT).
 
+## Repository structure
+
+```
+├── README.md
+├── .gitignore
+├── .env.example
+└── backend/
+    ├── index.ts          # Entry point
+    ├── src/              # Application code
+    ├── tests/            # Tests (optional)
+    ├── prisma/
+    ├── scripts/
+    ├── package.json
+    └── .env.example
+```
+
 ---
 
 ## Tech Stack
@@ -15,8 +31,6 @@ Backend REST API for the **A2SV Eskalate assessment**. Authors publish articles,
 | Validation | Zod (centralized request body schemas) |
 | Background job | node-cron (daily ReadLog → DailyAnalytics aggregation in GMT) |
 
-**Why these choices:** Prisma gives strong typing and migrations; Argon2 is recommended for password hashing; Zod keeps validation in one place; node-cron avoids external infra (e.g. Redis) while still meeting the “job queue” requirement for daily processing.
-
 ---
 
 ## Setup
@@ -26,15 +40,21 @@ Backend REST API for the **A2SV Eskalate assessment**. Authors publish articles,
 - **Node.js** 18+
 - **PostgreSQL**
 
-### 1. Install dependencies
+### 1. Go to backend
+
+```bash
+cd backend
+```
+
+### 2. Install dependencies
 
 ```bash
 npm install
 ```
 
-### 2. Environment
+### 3. Environment
 
-Copy `.env.example` to `.env` and set:
+Copy `backend/.env.example` to `backend/.env` and set:
 
 | Variable | Description |
 |----------|-------------|
@@ -43,18 +63,16 @@ Copy `.env.example` to `.env` and set:
 | `JWT_EXPIRES_IN` | Token expiry (e.g. `24h`) |
 | `PORT` | Server port (default `3000`) |
 
-### 3. Database
+### 4. Database
 
 ```bash
 npx prisma generate
 npx prisma db push
 ```
 
-Or with migrations: `npx prisma migrate dev`
-
 **Test connection:** `npm run db:test`
 
-### 4. Run
+### 5. Run
 
 ```bash
 npm run dev
@@ -90,13 +108,7 @@ npm run dev
 
 ---
 
-## Bonus: preventing duplicate ReadLog entries
-
-To avoid one user generating many ReadLog entries by refreshing: rate-limit by IP or user per article (e.g. 1 read per 5 min), or use a short-TTL cache key `readerId:articleId` and skip creating a new ReadLog if the key exists.
-
----
-
-## Scripts
+## Scripts (run from `backend/`)
 
 | Script | Description |
 |--------|-------------|
@@ -106,6 +118,8 @@ To avoid one user generating many ReadLog entries by refreshing: rate-limit by I
 | `npm run db:generate` | Generate Prisma client |
 | `npm run db:push` | Push schema to DB |
 | `npm run db:test` | Test PostgreSQL connection |
+| `npm test` | Run unit tests (Jest, DB mocked) |
+| `npm run test:watch` | Run tests in watch mode |
 
 ---
 
