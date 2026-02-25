@@ -24,7 +24,7 @@ export async function signup(input: SignupInput) {
   const token = jwt.sign(
     { sub: user.id, role: user.role },
     env.jwtSecret,
-    { expiresIn: env.jwtExpiresIn }
+    { expiresIn: env.jwtExpiresIn } as jwt.SignOptions
   );
   return { success: true as const, user, token };
 }
@@ -37,7 +37,7 @@ export async function login(input: LoginInput) {
   const token = jwt.sign(
     { sub: user.id, role: user.role },
     env.jwtSecret,
-    { expiresIn: env.jwtExpiresIn }
+    { expiresIn: env.jwtExpiresIn } as jwt.SignOptions
   );
   return {
     success: true as const,

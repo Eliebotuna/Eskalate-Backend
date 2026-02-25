@@ -1,4 +1,4 @@
-import { PrismaClient, ArticleStatus } from "@prisma/client";
+import { PrismaClient, ArticleStatus, Prisma } from "@prisma/client";
 import { CreateArticleInput, UpdateArticleInput } from "../validators/article";
 import { recordRead } from "./readLogService";
 
@@ -82,7 +82,7 @@ export async function listPublic(
   pageSize: number,
   filters: PublicListFilters
 ) {
-  const where: Parameters<PrismaClient["article"]["findMany"]>[0]["where"] = {
+  const where: Prisma.ArticleWhereInput = {
     status: ArticleStatus.Published,
     deletedAt: null,
   };

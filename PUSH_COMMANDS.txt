@@ -1,0 +1,11 @@
+# Run these commands in PowerShell from the Backend folder
+
+cd "C:\Users\Elijah Lyon King\Documents\Backend"
+
+git add .
+git status
+git commit -m "chore: all corrections made - remove Redis/BullMQ and use node-cron for daily analytics; fix Prisma ArticleWhereInput type; update README with setup, API table, tech choices and scripts; remove test folder and Jest config"
+git push origin main
+
+# If your branch is "master" instead of "main":
+# git push origin master
